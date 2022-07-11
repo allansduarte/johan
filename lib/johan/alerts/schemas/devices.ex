@@ -5,25 +5,25 @@ defmodule Johan.Alerts.Schemas.Devices do
 
   use Johan.Schema
 
-  alias Johan.Alerts.Schemas.HealthCenter
-  alias Johan.Alerts.Schemas.Patient
+  alias Johan.Alerts.Schemas.HealthCenters
+  alias Johan.Alerts.Schemas.Patients
 
-  @required [:sim_sid, :health_center_id, :patient_id]
+  @required [:sim_sid, :health_centers_id, :patients_id]
 
   schema "devices" do
     field :sim_sid, :string
 
-    belongs_to :health_center, HealthCenter
-    belongs_to :patient, Patient
+    belongs_to :health_centers, HealthCenters
+    belongs_to :patients, Patients
 
     timestamps()
   end
 
   @doc "Changeset for creating a device"
-  @spec changeset(device :: map(), attrs :: map()) :: Ecto.Changeset.t()
-  def changeset(device \\ %__MODULE__{}, attrs) do
-    device
-    |> cast(attrs, @required)
+  @spec changeset(params :: map()) :: Ecto.Changeset.t()
+  def changeset(params) do
+    %__MODULE__{}
+    |> cast(params, @required)
     |> validate_required(@required)
   end
 end

@@ -5,20 +5,22 @@ defmodule Johan.Alerts.Schemas.Caregivers do
 
   use Johan.Schema
 
-  alias Johan.Alerts.Schemas.HealthCenter
+  alias Johan.Alerts.Schemas.HealthCenters
+
+  @required [:phone_number, :health_centers_id]
 
   schema "caregivers" do
     field :phone_number, :string
-    belongs_to :health_center, HealthCenter
+    belongs_to :health_centers, HealthCenters
 
     timestamps()
   end
 
    @doc "Changeset for creating a caregiver"
-   @spec changeset(caregiver :: map(), attrs :: map()) :: Ecto.Changeset.t()
-  def changeset(caregiver \\ %__MODULE__{}, attrs) do
-    caregiver
-    |> cast(attrs, [:phone_number, :health_center_id])
-    |> validate_required([:phone_number, :health_center_id])
+   @spec changeset(params :: map()) :: Ecto.Changeset.t()
+  def changeset(params) do
+    %__MODULE__{}
+    |> cast(params, @required)
+    |> validate_required(@required)
   end
 end

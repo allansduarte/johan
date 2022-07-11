@@ -1,4 +1,4 @@
-defmodule Johan.Alerts.Schemas.HealthCenter do
+defmodule Johan.Alerts.Schemas.HealthCenters do
   @moduledoc """
   Represents a health center.
   """
@@ -18,10 +18,10 @@ defmodule Johan.Alerts.Schemas.HealthCenter do
   end
 
   @doc "Changeset for creating a health center"
-  @spec changeset(health_center :: map(), attrs :: map()) :: Ecto.Changeset.t()
-  def changeset(health_center \\ %__MODULE__{}, attrs) do
-    health_center
-    |> cast(attrs, [:name])
+  @spec changeset(params :: map()) :: Ecto.Changeset.t()
+  def changeset(params) do
+    %__MODULE__{}
+    |> cast(params, [:name])
     |> validate_required([:name])
   end
 end

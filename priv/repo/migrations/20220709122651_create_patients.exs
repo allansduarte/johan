@@ -10,9 +10,11 @@ defmodule Johan.Repo.Migrations.CreatePatients do
       add :last_name, :string, null: false
       add :addresses, {:array, :map}, null: false
       add :metadata, :map
-      add :health_center_id, references(:health_center, validate: false, type: :uuid)
+      add :health_centers_id, references(:health_centers, validate: false, type: :uuid)
+
+      timestamps()
     end
 
-    create_if_not_exists unique_index(:patients, [:first_name, :last_name, :health_center_id])
+    create_if_not_exists unique_index(:patients, [:first_name, :last_name, :health_centers_id])
   end
 end
