@@ -13,4 +13,18 @@ defmodule JohanWeb.ErrorView do
   def template_not_found(template, _assigns) do
     %{errors: %{detail: Phoenix.Controller.status_message_from_template(template)}}
   end
+
+  @doc "Render the response from custom errors"
+  @spec render(String.t(), map()) :: map()
+  def render("error.json", %{type: type, reason: reason, error: error}) do
+    %{type: type, reason: reason, error: error}
+  end
+
+  def render("error.json", %{type: type, reason: reason}) do
+    %{type: type, reason: reason}
+  end
+
+  def render("error.json", %{type: type}) do
+    %{type: type}
+  end
 end
