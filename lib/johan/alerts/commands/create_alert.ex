@@ -29,12 +29,13 @@ defmodule Johan.Alerts.Commands.CreateAlert do
       with {:ok, content} <- format_content(input),
            {:ok, alert_content} <- validate_content(content),
            {:ok, device} <- find_device(input.sim_sid),
-           {:ok, alert} <- register_alert(device.patients_id, alert_content) do
+           {:ok, alert} <- register_alert(device.patients_id, alert_content, input) do
         alert
       else
         err ->
           Logger.error("""
           Unexpected error processing Alert
+          Input: #{inspect(input)}
           error: #{inspect(err)}
           """)
 
@@ -57,11 +58,14 @@ defmodule Johan.Alerts.Commands.CreateAlert do
     end
   end
 
-  defp register_alert(patients_id, alert_content) do
+  defp register_alert(patients_id, alert_content, input) do
+    payload = Map.from_struct(input)
+
     attrs =
       alert_content
       |> Map.from_struct()
       |> Map.put(:patients_id, patients_id)
+      |> Map.put(:metadata, payload)
 
     %Alerts{}
     |> Alerts.changeset(attrs)

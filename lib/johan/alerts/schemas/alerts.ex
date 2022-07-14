@@ -9,7 +9,7 @@ defmodule Johan.Alerts.Schemas.Alerts do
 
   @type alert_type :: :BPM | :FALL | :TEMP
 
-  @required [:created, :type, :value, :lat, :lon, :patients_id]
+  @required [:created, :type, :value, :lat, :lon, :patients_id, :metadata]
   @alert_type [:BPM, :FALL, :TEMP]
 
   schema "alerts" do
@@ -18,6 +18,7 @@ defmodule Johan.Alerts.Schemas.Alerts do
     field :value, :string
     field :lat, :string
     field :lon, :string
+    field :metadata, :map
 
     belongs_to :patients, Patients
   end

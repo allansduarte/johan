@@ -11,6 +11,7 @@ defmodule Johan.Repo.Migrations.CreateAlerts do
       add :value, :string
       add :lat, :string
       add :lon, :string
+      add :metadata, :map
       add :patients_id, references(:patients, type: :uuid)
     end
   end
