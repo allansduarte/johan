@@ -7,6 +7,8 @@ defmodule JohanWeb.Router do
 
   scope "/api", JohanWeb do
     pipe_through :api
+
+    post "/alerts", AlertsController, :create
   end
 
   # Enables LiveDashboard only for development

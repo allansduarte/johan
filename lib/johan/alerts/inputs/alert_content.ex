@@ -19,7 +19,7 @@ defmodule Johan.Alerts.Inputs.AlertContent do
 
   @doc "Changeset for validate an alert content"
   @spec changeset(module :: map(), params :: map()) :: Ecto.Changeset.t()
-  def changeset(module, params) do
+  def changeset(module \\ %__MODULE__{}, params) do
     module
     |> cast(params, @required)
     |> validate_required(@required)

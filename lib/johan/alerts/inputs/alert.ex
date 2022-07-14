@@ -18,9 +18,9 @@ defmodule Johan.Alerts.Inputs.Alert do
   end
 
   @doc "Changeset for validate alert payload"
-  @spec changeset(params :: map()) :: Ecto.Changeset.t()
-  def changeset(params) do
-    %__MODULE__{}
+  @spec changeset(module :: map(), params :: map()) :: Ecto.Changeset.t()
+  def changeset(module \\ %__MODULE__{}, params) do
+    module
     |> cast(params, @required)
     |> validate_required(@required)
   end

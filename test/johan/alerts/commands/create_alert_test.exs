@@ -49,7 +49,7 @@ defmodule Johan.Alerts.Commands.CreateAlertTest do
         content: "ALERT DT=2015-07-30T20:00:00Z T=BPM VAL=200 LAT=52.1544408 LON=4.2934847"
       }
 
-      assert :device_not_found = CreateAlert.execute(input)
+      assert {:error, :device_not_found} = CreateAlert.execute(input)
     end
   end
 end

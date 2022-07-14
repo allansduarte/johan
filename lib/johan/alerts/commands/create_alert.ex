@@ -50,7 +50,7 @@ defmodule Johan.Alerts.Commands.CreateAlert do
   defp find_device(sim_sid) do
     case Repo.get_by(Devices, sim_sid: sim_sid) do
       nil ->
-        :device_not_found
+        {:error, :device_not_found}
 
       device ->
         {:ok, device}
