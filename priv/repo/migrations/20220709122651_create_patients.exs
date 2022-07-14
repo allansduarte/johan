@@ -10,7 +10,7 @@ defmodule Johan.Repo.Migrations.CreatePatients do
       add :last_name, :string, null: false
       add :addresses, {:array, :map}, null: false
       add :metadata, :map
-      add :health_centers_id, references(:health_centers, validate: false, type: :uuid)
+      add :health_centers_id, references(:health_centers, type: :uuid)
 
       timestamps()
     end

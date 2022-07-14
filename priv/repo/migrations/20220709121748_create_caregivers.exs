@@ -7,7 +7,7 @@ defmodule Johan.Repo.Migrations.CreateCaregivers do
     create_if_not_exists table(:caregivers, primary_key: false) do
       add :id, :uuid, primary_key: true
       add :phone_number, :string
-      add :health_centers_id, references(:health_centers, validate: false, type: :uuid)
+      add :health_centers_id, references(:health_centers, type: :uuid)
 
       timestamps()
     end

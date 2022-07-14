@@ -7,8 +7,8 @@ defmodule Johan.Repo.Migrations.CreateDevices do
     create_if_not_exists table(:devices, primary_key: false) do
       add :id, :uuid, primary_key: true
       add :sim_sid, :string, null: false
-      add :patients_id, references(:patients, validate: false, type: :uuid)
-      add :health_centers_id, references(:health_centers, validate: false, type: :uuid)
+      add :patients_id, references(:patients, type: :uuid)
+      add :health_centers_id, references(:health_centers, type: :uuid)
 
       timestamps()
     end
