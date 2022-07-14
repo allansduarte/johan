@@ -24,6 +24,7 @@ defmodule Johan.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Johan.DataCase
+      import Johan.Factory
     end
   end
 
