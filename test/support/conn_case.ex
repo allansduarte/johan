@@ -23,6 +23,7 @@ defmodule JohanWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import JohanWeb.ConnCase
+      import Johan.Factory
 
       alias JohanWeb.Router.Helpers, as: Routes
 
