@@ -17,7 +17,6 @@ defmodule Johan.Alerts.Commands.CreateAlertTest do
 
       assert {:ok, alert} = CreateAlert.execute(input)
       assert alert.patients_id == device.patients_id
-      IO.inspect alert
     end
 
     test "with invalid format" do
