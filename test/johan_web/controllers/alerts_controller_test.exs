@@ -53,4 +53,68 @@ defmodule JohanWeb.AlertsControllerTest do
                |> json_response(404)
     end
   end
+
+  describe "GET /api/alerts" do
+    setup do
+      alerts = insert_list(10, :alerts)
+
+      {:ok, alerts: alerts}
+    end
+
+    test "succeeds if params are empty", ctx do
+      dt_at = NaiveDateTime.to_iso8601(NaiveDateTime.utc_now())
+
+      assert %{
+               "data" => [
+                 %{
+                   "created" => _,
+                   "lat" => _,
+                   "lon" => _,
+                   "metadata" => _,
+                   "patients_id" => _
+                 }
+                 | _alerts
+               ],
+               "page_number" => 1,
+               "page_size" => 5,
+               "total_entries" => 10,
+               "total_pages" => 2
+             } =
+               ctx.conn
+               |> get(
+                 "/api/alerts",
+                 %{
+                   "filter" => %{"type" => "BPM", "created_at_start" => dt_at},
+                   "page_size" => "5"
+                 }
+               )
+               |> json_response(200)
+    end
+
+    test "renders an empty list if nothing was found", ctx do
+      assert %{
+               "data" => [],
+               "page_number" => 1,
+               "page_size" => 10,
+               "total_entries" => 0,
+               "total_pages" => 1
+             } =
+               ctx.conn
+               |> get("/api/alerts", %{"filter" => %{"type" => "FALL"}})
+               |> json_response(200)
+    end
+
+    test "fails if params are invalid", ctx do
+      assert %{
+               "errors" => [%{"filter" => %{"type" => ["is invalid"]}}],
+               "reason" => "invalid_params",
+               "type" => "jrn:error:invalid_params"
+             } ==
+               ctx.conn
+               |> get("/api/alerts", %{
+                 "filter" => ~s/{"type": "invalid_type"}/
+               })
+               |> json_response(422)
+    end
+  end
 end
