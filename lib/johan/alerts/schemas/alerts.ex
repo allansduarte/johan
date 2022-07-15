@@ -4,6 +4,7 @@ defmodule Johan.Alerts.Schemas.Alerts do
   """
 
   use Johan.Schema
+  use Johan.Query
 
   alias Johan.Alerts.Schemas.Patients
 
