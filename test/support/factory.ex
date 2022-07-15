@@ -4,6 +4,7 @@ defmodule Johan.Factory do
   use ExMachina.Ecto, repo: Johan.Repo
 
   alias Johan.Alerts.Schemas.{
+    Alerts,
     Devices,
     Patients,
     HealthCenters
@@ -26,6 +27,17 @@ defmodule Johan.Factory do
       metadata: %{responsible: "John"},
       addresses: [%{street: "Inambú street", number: 4000}],
       health_centers: build(:health_centers)
+    }
+  end
+
+  def alerts_factory do
+    %Alerts{
+      created: NaiveDateTime.utc_now(),
+      type: :BPM,
+      value: "200",
+      lat: "52.1544408",
+      lon: "4.2934847",
+      patients: build(:patients)
     }
   end
 end
