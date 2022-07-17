@@ -25,6 +25,7 @@ defmodule Johan.DataCase do
       import Ecto.Query
       import Johan.DataCase
       import Johan.Factory
+      import Mox
     end
   end
 

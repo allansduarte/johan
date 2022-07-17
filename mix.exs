@@ -49,7 +49,8 @@ defmodule Johan.MixProject do
       {:scrivener_ecto, "~> 2.0"},
       {:ex_twilio, "~> 0.9.1"},
       {:ravenx, "~> 2.0"},
-      {:knigge, "~> 1.4"}
+      {:knigge, "~> 1.4"},
+      {:mox, "~> 1.0", only: :test}
     ]
   end
 
