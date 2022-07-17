@@ -48,7 +48,8 @@ defmodule Johan.MixProject do
       {:faker, "~> 0.17", only: :test},
       {:scrivener_ecto, "~> 2.0"},
       {:ex_twilio, "~> 0.9.1"},
-      {:ravenx, "~> 2.0"}
+      {:ravenx, "~> 2.0"},
+      {:knigge, "~> 1.4"}
     ]
   end
 
