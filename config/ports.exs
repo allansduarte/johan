@@ -21,7 +21,11 @@ ports_by_app = %{
     {
       Johan.Notifications.SMS,
       Johan.Notifications.SMS.Dispatcher
-    }
+    },
+    {
+      Johan.NotificationDispatcher.Ports.SendNotification,
+      Johan.NotificationDispatcher.Ports.SendNotification
+    },
   ]
 }
 
