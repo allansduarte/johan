@@ -50,7 +50,7 @@ defmodule Johan.Notifications.SMS.Dispatcher do
           {:ok, %{data: map(), status: pos_integer()}}
           | {:error, %{data: map(), status: pos_integer()}}
   def dispatch_sms(target, body) do
-    case Message.create(to: target, from: @default_johan_twilio_number, body: body) do
+    case Message.create(sid: target, from: @default_johan_twilio_number, body: body) do
       {:ok, response} ->
         {:ok, %{data: response |> ValueObjectSchema.to_map(), status: 200}}
 
