@@ -38,7 +38,9 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 config :ravenx,
-  strategies: []
+  strategies: [
+    patient_alert: Johan.Notifications.Strategy.PatientAlert
+  ]
 
   import_config "ports.exs"
 
