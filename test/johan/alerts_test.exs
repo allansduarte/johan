@@ -3,6 +3,7 @@ defmodule Johan.AlertsTest do
 
   alias Johan.Alerts
   alias Johan.Alerts.Schemas.Alerts, as: AlertSchema
+  alias Johan.NotificationDispatcher.Ports.SendNotificationMock
 
   alias Johan.Alerts.Inputs.{
     Alert,
@@ -19,6 +20,8 @@ defmodule Johan.AlertsTest do
         sim_sid: device.sim_sid,
         content: "ALERT DT=2015-07-30T20:00:00Z T=BPM VAL=200 LAT=52.1544408 LON=4.2934847"
       }
+
+      expect(SendNotificationMock, :send_notification, fn _message_input -> :ok end)
 
       assert {:ok, alert} = Alerts.create(input)
       assert alert.patients_id == device.patients_id

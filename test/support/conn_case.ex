@@ -24,6 +24,7 @@ defmodule JohanWeb.ConnCase do
       import Phoenix.ConnTest
       import JohanWeb.ConnCase
       import Johan.Factory
+      import Mox
 
       alias JohanWeb.Router.Helpers, as: Routes
 

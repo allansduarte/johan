@@ -3,6 +3,7 @@ defmodule Johan.Alerts.Commands.CreateAlertTest do
 
   alias Johan.Alerts.Inputs.Alert
   alias Johan.Alerts.Commands.CreateAlert
+  alias Johan.NotificationDispatcher.Ports.SendNotificationMock
 
   describe "CreateAlert/1" do
     test "with valid input" do
@@ -14,6 +15,17 @@ defmodule Johan.Alerts.Commands.CreateAlertTest do
         sim_sid: device.sim_sid,
         content: "ALERT DT=2015-07-30T20:00:00Z T=BPM VAL=200 LAT=52.1544408 LON=4.2934847"
       }
+
+      expect(SendNotificationMock, :send_notification, fn message_input ->
+        assert message_input.event == "patient_alert"
+        assert message_input.data.value == device.sim_sid
+        assert message_input.data.first_name == device.patients.first_name
+        assert message_input.data.last_name == device.patients.last_name
+        assert message_input.data.type == :BPM
+        assert message_input.data.date == "7/30/2015 20:0:0"
+
+        :ok
+      end)
 
       assert {:ok, alert} = CreateAlert.execute(input)
       assert alert.patients_id == device.patients_id

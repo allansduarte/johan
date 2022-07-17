@@ -19,6 +19,8 @@ defmodule Johan.Alerts.Commands.CreateAlert do
     Devices
   }
 
+  alias Johan.NotificationDispatcher
+
   alias Johan.Repo
 
   @type possible_errors :: Ecto.Changeset.t() | :invalid_format | :device_not_found
@@ -29,7 +31,8 @@ defmodule Johan.Alerts.Commands.CreateAlert do
       with {:ok, content} <- format_content(input),
            {:ok, alert_content} <- validate_content(content),
            {:ok, device} <- find_device(input.sim_sid),
-           {:ok, alert} <- register_alert(device.patients_id, alert_content, input) do
+           {:ok, alert} <- register_alert(device.patients_id, alert_content, input),
+           :ok <- send_notification(device, alert_content) do
         alert
       else
         err ->
@@ -48,8 +51,28 @@ defmodule Johan.Alerts.Commands.CreateAlert do
     end
   end
 
+  defp send_notification(device, alert_content) do
+    formatted_date = format_incident_date(alert_content.created)
+
+    NotificationDispatcher.send_notification(%{
+      event: "patient_alert",
+      data: %{
+        value: device.sim_sid,
+        type: alert_content.type,
+        date: formatted_date,
+        first_name: device.patients.first_name,
+        last_name: device.patients.last_name
+      }
+    })
+  end
+
+  defp format_incident_date(n), do: "#{n.month}/#{n.day}/#{n.year} #{n.hour}:#{n.minute}:#{n.second}"
+
   defp find_device(sim_sid) do
-    case Repo.get_by(Devices, sim_sid: sim_sid) do
+    Devices
+    |> Repo.get_by(sim_sid: sim_sid)
+    |> Repo.preload(:patients)
+    |> case do
       nil ->
         {:error, :device_not_found}
 

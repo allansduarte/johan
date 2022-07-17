@@ -1,6 +1,8 @@
 defmodule JohanWeb.AlertsControllerTest do
   use JohanWeb.ConnCase, async: true
 
+  alias Johan.NotificationDispatcher.Ports.SendNotificationMock
+
   describe "POST /api/alerts" do
     test "with valid payload", ctx do
       device = insert(:devices)
@@ -12,6 +14,8 @@ defmodule JohanWeb.AlertsControllerTest do
         content: "ALERT DT=2015-07-30T20:00:00Z T=BPM VAL=200 LAT=52.1544408 LON=4.2934847",
         direction: "from_sim"
       }
+
+      expect(SendNotificationMock, :send_notification, fn _message_input -> :ok end)
 
       response = post(ctx.conn, "/api/alerts", payload)
 
