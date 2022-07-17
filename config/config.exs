@@ -42,7 +42,7 @@ config :ravenx,
     patient_alert: Johan.Notifications.Strategy.PatientAlert
   ]
 
-  import_config "ports.exs"
+import_config "ports.exs"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
