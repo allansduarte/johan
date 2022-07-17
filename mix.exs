@@ -20,7 +20,7 @@ defmodule Johan.MixProject do
   def application do
     [
       mod: {Johan.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:ex_twilio, :logger, :runtime_tools]
     ]
   end
 
@@ -46,7 +46,8 @@ defmodule Johan.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:ex_machina, "~> 2.7.0", only: :test},
       {:faker, "~> 0.17", only: :test},
-      {:scrivener_ecto, "~> 2.0"}
+      {:scrivener_ecto, "~> 2.0"},
+      {:ex_twilio, "~> 0.9.1"}
     ]
   end
 

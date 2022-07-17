@@ -14,6 +14,10 @@ config :johan, JohanWeb.Endpoint, cache_static_manifest: "priv/static/cache_mani
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :ex_twilio,
+  account_sid: {:system, "TWILIO_ACCOUNT_SID"},
+  auth_token: {:system, "TWILIO_AUTH_TOKEN"}
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
