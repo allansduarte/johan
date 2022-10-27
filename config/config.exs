@@ -42,6 +42,17 @@ config :ravenx,
     patient_alert: Johan.Notifications.Strategy.PatientAlert
   ]
 
+config :johan, Oban,
+  repo: Johan.Repo,
+  queues: [default: 10, mailers: 20, events: 50, low: 5],
+  plugins: [
+    Oban.Plugins.Pruner,
+    {Oban.Plugins.Cron,
+     crontab: [
+       {"0 8 * * *", Tutorial.Workers.DailyDigestWorker}
+     ]}
+  ]
+
 import_config "ports.exs"
 
 # Import environment specific config. This must remain at the bottom

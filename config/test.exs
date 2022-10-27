@@ -23,6 +23,9 @@ config :johan, JohanWeb.Endpoint,
 # In test we don't send emails.
 config :johan, Johan.Mailer, adapter: Swoosh.Adapters.Test
 
+# Oban config
+config :johan, Oban, queues: false, plugins: false
+
 # Print only warnings and errors during test
 config :logger, backends: [], level: :warn
 

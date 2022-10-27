@@ -15,9 +15,8 @@ defmodule Johan.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Johan.PubSub},
       # Start the Endpoint (http/https)
-      JohanWeb.Endpoint
-      # Start a worker by calling: Johan.Worker.start_link(arg)
-      # {Johan.Worker, arg}
+      JohanWeb.Endpoint,
+      {Oban, oban_config()}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -32,5 +31,9 @@ defmodule Johan.Application do
   def config_change(changed, _new, removed) do
     JohanWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp oban_config do # Add this line
+    Application.fetch_env!(:johan, Oban)
   end
 end

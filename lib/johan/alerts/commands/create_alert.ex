@@ -12,6 +12,7 @@ defmodule Johan.Alerts.Commands.CreateAlert do
     AlertContent
   }
 
+  alias Johan.Alerts.Jobs.AlertDigestWorker
   alias Johan.ChangesetValidation
 
   alias Johan.Alerts.Schemas.{
@@ -19,27 +20,26 @@ defmodule Johan.Alerts.Commands.CreateAlert do
     Devices
   }
 
-  alias Johan.NotificationDispatcher
-
+  alias Johan.ObanHelper
   alias Johan.Repo
 
   @type possible_errors :: Ecto.Changeset.t() | :invalid_format | :device_not_found
 
-  @spec execute(input :: Alert.t()) :: {:ok, Alerts.t()} | {:error, possible_errors()}
+  @spec execute(input :: Alert.t()) :: :ok | {:error, possible_errors()}
   def execute(%Alert{} = input) do
     Repo.transaction(fn ->
       with {:ok, content} <- format_content(input),
            {:ok, alert_content} <- validate_content(content),
            {:ok, device} <- find_device(input.sim_sid),
            {:ok, alert} <- register_alert(device.patients_id, alert_content, input),
-           :ok <- send_notification(device, alert_content) do
+           {:ok, _job} <- publish_alert(device, alert_content) do
         alert
       else
         err ->
           Logger.error("""
           Unexpected error processing Alert
           Input: #{inspect(input)}
-          error: #{inspect(err)}
+          Error: #{inspect(err)}
           """)
 
           Repo.rollback(err)
@@ -48,36 +48,6 @@ defmodule Johan.Alerts.Commands.CreateAlert do
     |> case do
       {:ok, alert} -> {:ok, alert}
       {:error, err} -> err
-    end
-  end
-
-  defp send_notification(device, alert_content) do
-    formatted_date = format_incident_date(alert_content.created)
-
-    NotificationDispatcher.send_notification(%{
-      event: "patient_alert",
-      data: %{
-        value: device.sim_sid,
-        type: alert_content.type,
-        date: formatted_date,
-        first_name: device.patients.first_name,
-        last_name: device.patients.last_name
-      }
-    })
-  end
-
-  defp format_incident_date(n), do: "#{n.month}/#{n.day}/#{n.year} #{n.hour}:#{n.minute}:#{n.second}"
-
-  defp find_device(sim_sid) do
-    Devices
-    |> Repo.get_by(sim_sid: sim_sid)
-    |> Repo.preload(:patients)
-    |> case do
-      nil ->
-        {:error, :device_not_found}
-
-      device ->
-        {:ok, device}
     end
   end
 
@@ -93,6 +63,34 @@ defmodule Johan.Alerts.Commands.CreateAlert do
     %Alerts{}
     |> Alerts.changeset(attrs)
     |> Repo.insert()
+  end
+
+  defp publish_alert(device, alert_content) do
+    formatted_date = format_incident_date(alert_content.created)
+
+    ObanHelper.insert_job(AlertDigestWorker, %{
+      "sim_sid" => device.sim_sid,
+      "first_name" => device.patients.first_name,
+      "last_name" => device.patients.last_name,
+      "type" => alert_content.type,
+      "created" => formatted_date
+    })
+  end
+
+  defp format_incident_date(n),
+    do: "#{n.month}/#{n.day}/#{n.year} #{n.hour}:#{n.minute}:#{n.second}"
+
+  defp find_device(sim_sid) do
+    Devices
+    |> Repo.get_by(sim_sid: sim_sid)
+    |> Repo.preload(:patients)
+    |> case do
+      nil ->
+        {:error, :device_not_found}
+
+      device ->
+        {:ok, device}
+    end
   end
 
   defp validate_content(content), do: ChangesetValidation.cast_and_apply(AlertContent, content)

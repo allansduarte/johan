@@ -18,7 +18,7 @@ defmodule Johan.DataCase do
 
   using do
     quote do
-      alias Johan.Repo
+      use Oban.Testing, repo: Johan.Repo
 
       import Ecto
       import Ecto.Changeset
@@ -26,6 +26,8 @@ defmodule Johan.DataCase do
       import Johan.DataCase
       import Johan.Factory
       import Mox
+
+      alias Johan.Repo
     end
   end
 

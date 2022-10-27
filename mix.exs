@@ -51,7 +51,8 @@ defmodule Johan.MixProject do
       {:ravenx, "~> 2.0"},
       {:knigge, "~> 1.4"},
       {:mox, "~> 1.0", only: :test},
-      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:oban, "~> 2.13.3"}
     ]
   end
 
