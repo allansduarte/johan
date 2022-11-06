@@ -49,7 +49,7 @@ config :johan, Oban,
     Oban.Plugins.Pruner,
     {Oban.Plugins.Cron,
      crontab: [
-       {"0 8 * * *", Tutorial.Workers.DailyDigestWorker}
+       {"0 8 * * *", Johan.Alerts.Jobs.AlertDigestWorker}
      ]}
   ]
 
